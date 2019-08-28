@@ -13,10 +13,8 @@ android.applicationVariants.all { variant ->
         def keySecret = System.env.AWS_S3_KEY_SECRET
 
         def prefix = project.hasProperty('AWS_S3_APK_TARGET_FOLDER') ? project.AWS_S3_APK_TARGET_FOLDER + "/" : ""
-
+        def apkFile = new File("${project.buildDir.absolutePath}/outputs/apk/${variant.buildType.name}/${project.name}-${variant.buildType.name}.apk")
         def targetPath = "latest-${variant.name}.apk"
-        def apkFile = variant.outputs[0].outputFile
-
         def contentType = "application/vnd.android.package-archive"
         def date = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss ZZZZ").format(new Date())
 
