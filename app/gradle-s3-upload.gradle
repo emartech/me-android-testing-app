@@ -1,0 +1,41 @@
+import javax.crypto.Mac
+import javax.crypto.spec.SecretKeySpec
+import java.text.SimpleDateFormat
+
+android.applicationVariants.all { variant ->
+    task("publish${variant.name.capitalize()}ToS3", dependsOn: "assemble${variant.name.capitalize()}").doLast {
+        if (!System.env.AWS_S3_BUCKET) throw new Exception("Please set AWS_S3_BUCKET property.")
+        if (!System.env.AWS_S3_KEY_ID) throw new Exception("Please set AWS_S3_KEY_ID property.")
+        if (!System.env.AWS_S3_KEY_SECRET) throw new Exception("Please set AWS_S3_KEY_SECRET property.")
+
+        def bucket = System.env.AWS_S3_BUCKET
+        def keyId = System.env.AWS_S3_KEY_ID
+        def keySecret = System.env.AWS_S3_KEY_SECRET
+
+        def prefix = project.hasProperty('AWS_S3_APK_TARGET_FOLDER') ? project.AWS_S3_APK_TARGET_FOLDER + "/" : ""
+
+        def targetPath = "latest-${variant.name}.apk"
+        def apkFile = variant.outputs[0].outputFile
+
+        def contentType = "application/vnd.android.package-archive"
+        def date = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss ZZZZ").format(new Date())
+
+        def resource = "/${bucket}/${targetPath}"
+        def data = "PUT\n\n${contentType}\n${date}\n${resource}"
+        def signingKey = new SecretKeySpec(keySecret.getBytes(), "HmacSHA1")
+        def mac = Mac.getInstance("HmacSHA1")
+        mac.init(signingKey)
+        def sig = mac.doFinal(data.getBytes()).encodeBase64()
+
+        exec {
+            executable 'curl'
+            args '-k', '-X', 'PUT',
+                    '-T', apkFile.getAbsolutePath(),
+                    '-H', 'Date: ' + date,
+                    '-H', 'Authorization: AWS ' + keyId + ':' + sig,
+                    '-H', 'Content-Type: ' + contentType,
+                    '-H', "Host: ${bucket}.s3.amazonaws.com",
+                    'https://' + bucket + '.s3.amazonaws.com/' + targetPath
+        }
+    }
+}
