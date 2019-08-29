@@ -5,9 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.emarsys.Emarsys
 
 class MainActivity : AppCompatActivity() {
-
-    private val customEventName = "test"
-
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -15,10 +13,12 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        sendCustomEvents()
+        sendLatencyTestEvents()
     }
 
-    private fun sendCustomEvents() {
+    private fun sendLatencyTestEvents() {
+        val customEventName = "latency-test"
+        Emarsys.trackCustomEvent(customEventName, null)
         Emarsys.trackCustomEvent(customEventName, null)
         Emarsys.trackCustomEvent(customEventName, null)
     }
