@@ -15,23 +15,13 @@ import org.json.JSONObject
 class TestingApplication: Application(), EventHandler, NotificationEventHandler,  CompletionListener {
 
     private val appCode = "EMSDB-1E315"
-    private val customEventName = "test"
     private val contactFieldId = 3
     private val logTag = "me.testing"
 
     override fun onCreate() {
         super.onCreate()
-        val config = EmarsysConfig.Builder()
-            .application(this)
-            .mobileEngageApplicationCode(appCode)
-            .inAppEventHandler(this)
-            .notificationEventHandler(this)
-            .contactFieldId(contactFieldId)
-            .build()
 
-        Emarsys.setup(config)
-        Emarsys.trackCustomEvent(customEventName, null)
-        Emarsys.trackCustomEvent(customEventName, null)
+        configureEmarsysSDK()
     }
 
     override fun onCompleted(errorCause: Throwable?) {
@@ -47,5 +37,17 @@ class TestingApplication: Application(), EventHandler, NotificationEventHandler,
 
     override fun handleEvent(context: Context?, eventName: String?, payload: JSONObject?) {
         Toast.makeText(this, eventName + " - " + payload.toString(), Toast.LENGTH_LONG).show()
+    }
+
+    private fun configureEmarsysSDK() {
+        val config = EmarsysConfig.Builder()
+            .application(this)
+            .mobileEngageApplicationCode(appCode)
+            .inAppEventHandler(this)
+            .notificationEventHandler(this)
+            .contactFieldId(contactFieldId)
+            .build()
+
+        Emarsys.setup(config)
     }
 }
