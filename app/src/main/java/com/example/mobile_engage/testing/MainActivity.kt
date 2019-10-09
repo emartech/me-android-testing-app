@@ -1,6 +1,7 @@
 package com.example.mobile_engage.testing
 
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.widget.TextView
 import android.widget.Toast
@@ -30,11 +31,21 @@ class MainActivity : AppCompatActivity(), CompletionListener {
 
     private fun sendLatencyTestEvents() {
         val customEventName = "latency-test"
+        val delayBetweenEvents = 2000L
 
-        setStatus(R.string.in_progress_label)
+        setStatus(R.string.in_progress_label1)
         Emarsys.trackCustomEvent(customEventName, null)
-        Emarsys.trackCustomEvent(customEventName, null)
-        Emarsys.trackCustomEvent(customEventName, null, this)
+        Handler().postDelayed({
+            setStatus(R.string.in_progress_label2)
+            Emarsys.trackCustomEvent(customEventName, null)
+            Handler().postDelayed({
+                setStatus(R.string.in_progress_label3)
+                Emarsys.trackCustomEvent(customEventName, null, this)
+            }, delayBetweenEvents)
+        }, delayBetweenEvents)
+
+
+
     }
 
     private fun setStatus(resId: Int) {

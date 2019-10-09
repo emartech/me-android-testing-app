@@ -2,5 +2,7 @@
     <string name="app_name">Mobile Engage Latency Testing</string>
     <string name="done_label">It\'s done, you can close the app. Thank you! 🙏</string>
     <string name="error_label">Something went wrong. 💣</string>
-    <string name="in_progress_label">Running tests, hold on!</string>
+    <string name="in_progress_label1">Running tests, hold on!</string>
+    <string name="in_progress_label2">Almost there, I promise! 😬</string>
+    <string name="in_progress_label3">Finishing up</string>
 </resources>
