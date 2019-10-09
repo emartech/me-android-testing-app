@@ -4,4 +4,4 @@ The app itself does little more than trigger a few custom events using the Emars
 
 # Building and deploying
 
-We use [bitrise](https://app.bitrise.io/app/af52e2655ea828a9) to build and deploy the app. The latest version of the app is always available for download from https://emartech.github.io/me-android-testing-app.
+We use [bitrise](https://app.bitrise.io/app/ebc0c4c693995c67) to build and deploy the app. The latest version of the app is always available for download from https://emartech.github.io/me-android-testing-app.
