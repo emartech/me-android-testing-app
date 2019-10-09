@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity(), CompletionListener {
 
     private fun sendLatencyTestEvents() {
         val customEventName = "latency-test"
-        val delayBetweenEvents = 2000L
+        val delayBetweenEvents = 4000L
 
         setStatus(R.string.in_progress_label1)
         Emarsys.trackCustomEvent(customEventName, null)
